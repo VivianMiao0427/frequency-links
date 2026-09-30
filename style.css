@@ -1,0 +1,71 @@
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: 'Comic Sans MS', Arial, sans-serif;
+  background: linear-gradient(135deg, #ffe0f0, #d0f0ff);
+  transition: background 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 400px;
+  margin: 25px auto 0;
+}
+
+#rotationSlider {
+  width: 260px;
+  cursor: pointer;
+}
+
+#square {
+  width: 120px;
+  height: 120px;
+  border-radius: 24px;
+  background-color: aquamarine;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+#soundToggle {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  background: #ff6fa5;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 2px 3px 8px rgba(0,0,0,0.2);
+  transition: transform 0.15s ease;
+}
+
+#soundToggle:hover {
+  transform: scale(1.05);
+}
+
+.bubble {
+  position: fixed;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: inset -4px -4px 8px rgba(255,255,255,0.4),
+              inset 4px 4px 8px rgba(0,0,0,0.05);
+  transition: transform 0.35s cubic-bezier(.34,1.56,.64,1),
+              background 0.35s ease,
+              box-shadow 0.35s ease;
+  pointer-events: none;
+}
+
+.bubble.active {
+  transform: scale(1.8);
+  box-shadow: 0 0 18px 4px var(--bubble-glow, rgba(255,255,255,0.6));
+}

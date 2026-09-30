@@ -10,7 +10,7 @@ app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, '/index.html'));
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname));
 
 const server = app.listen(port, () => {
   console.log("Listening on port: " + port);
@@ -18,22 +18,32 @@ const server = app.listen(port, () => {
 
 const io = socketIO(server);
 
+let currentRotation = 0;
+let participantCount = 0;
+
 io.on('connection', (socket) => {
-  console.log('Client connected');
-  console.log(socket.id);
-  
-  //receives the frequency emitter from Client
-  socket.on("frequency", (arg) => {
-    console.log(arg); 
-    io.emit('freqResponse', arg);
+  participantCount += 1;
+
+  console.log('Client connected:', socket.id);
+
+  socket.emit('rotationResponse', currentRotation);
+
+  io.emit('participantCount', participantCount);
+
+  socket.on('rotation', (rawValue) => {
+    const value = Number(rawValue);
+
+    if (!Number.isFinite(value)) return;
+
+    currentRotation = Math.max(0, Math.min(360, value));
+
+    socket.broadcast.emit('rotationResponse', currentRotation);
   });
 
-  //receives the name emitter from Client
-  socket.on("name", (arg) => {
-    //console.log(arg);
-    io.emit('response', arg);
+  socket.on('disconnect', () => {
+    participantCount = Math.max(0, participantCount - 1);
+    io.emit('participantCount', participantCount);
+    console.log('Client disconnected:', socket.id);
   });
-
-  socket.on('disconnect', () => console.log('Client disconnected'));
 });
 
